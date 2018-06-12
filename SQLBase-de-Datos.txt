@@ -1,0 +1,239 @@
+create database sistemaERP;
+
+use sistemaERP;
+
+CREATE TABLE Empresa(
+	ID_Empresa int IDENTITY(1,1) Primary Key Not Null,
+	NombreEmpresa varchar(20) not null,
+	Propietaro varchar(25) not null,
+	Direccion varchar(15) not null
+);
+
+CREATE TABLE Empleado(
+	ID_empleado int IDENTITY(1,1) Primary key Not Null,
+	Nombre varchar(20) not null,
+	Usuario varchar(15) not null,
+	contraseña varchar(15) not null,
+	ID_empresa int not null,
+	FOREIGN KEY ID_empresa REFERENCES Empresa(ID_Empresa)
+);
+
+CREATE TABLE Pago(
+	ID_pago int IDENTITY(1,1) Primary Key Not Null,
+	ID_empresa int not null,
+	ID_servicio int not null,
+	Total int not null,
+	Foreign Key ID_empresa References Empresa(ID_Empresa),
+	Foreign Key ID_servicio References Servicio(ID_servicio)
+);
+
+CREATE TABLE Inventario(
+	ID_inventario int IDENTITY(1,1) Primary Key Not Null,
+	EstadoInvent int not null
+);
+
+CREATE TABLE ventas(
+	ID_ventas int IDENTITY(1,1) Primary Key Not Null,
+	Estadovent int not null
+);
+
+CREATE TABLE Facturar(
+	ID_factura int IDENTITY(1,1) Primary Key Not Null,
+	EstadoFact int not null
+);
+
+CREATE TABLE Compras(
+	ID_compras int IDENTITY(1,1) Primary Key Not Null,
+	EstadoComp int not null
+);
+
+CREATE TABLE Reclutamiento(
+	ID_reclutamiento int IDENTITY(1,1) Primary Key Not Null,
+	EstadoReclu int not null
+);
+
+CREATE TABLE Flota(
+	ID_flota int IDENTITY(1,1) Primary Key Not Null,
+	Estadoflot int not null
+);
+
+CREATE TABLE Blog(
+	ID_blog int IDENTITY(1,1) Primary Key Not Null,
+	Estadoblog int not null
+);
+
+CREATE TABLE Evento(
+	ID_Evento int IDENTITY(1,1) Primary Key Not Null,
+	EstadoEvent int Not Null
+);
+
+CREATE TABLE CRM(
+	ID_CRM int IDENTITY(1,1) Primary Key not null,
+	Estadocrm int not null
+);
+
+CREATE TABLE Publicidad(
+	ID_publicidad int IDENTITY(1,1) Primary Key not null,
+	EstadoPub int not null
+);
+
+CREATE TABLE Servicio(
+	ID_servico int IDENTITY(1,1) Primary Key Not Null,
+	ID_empresa int not null,
+	ID_empleado int not null,
+	ID_publicidad int not null,
+	ID_CRM int not null, 
+	ID_Evento int not null,
+	ID_blog int not null,
+	ID_flota int not null,
+	ID_reclutamiento int not null,
+	ID_compras int not null,
+	ID_factura int not null,
+	ID_ventas int not null,
+	ID_inventario int not null,
+	Foreign Key ID_empresa References Empresa(ID_Empresa),
+	Foreign Key ID_empleado References Empleado(ID_empleado),
+	Foreign Key ID_publicidad References Publicacion(ID_publicacion),
+	Foreign Key ID_CRM References Oportunidad(ID_oportunidad),
+	Foreign Key ID_Evento References Evento(ID_Evento),
+	Foreign Key ID_blog References Blog(ID_blog),
+	Foreign Key ID_flota References Flota(ID_flota),
+	Foreign Key ID_reclutamiento References Reclutamiento(ID_reclutamiento),
+	Foreign Key ID_compras References Compras(ID_compras),
+	Foreign Key ID_factura References Facturar(ID_factura),
+	Foreign Key ID_ventas References ventas(ID_ventas),
+	Foreign Key ID_inventario References Inventario(ID_inventario)
+);
+
+CREATE TABLE Publicacion(
+	ID_publicacion int IDENTITY(1,1) Primary Key Not Null,
+	NombrePublic varchar(15) not null,
+	Descripcion varchar(50),
+	Duracion varchar(20),
+	ID_publicidad int not null,
+	Foreign Key ID_publicidad References Publicidad(ID_publicidad)
+);
+
+CREATE TABLE Oportunidad(
+	ID_oportunidad int IDENTITY(1,1) Primary Key not null,
+	Titulo varchar(15) not null,
+	Cliente varchar(25) not null,
+	Ingreso int not null,
+	Prioridad varchar(25),
+	ID_CRM int not null,
+	Foreign Key ID_CRM References CRM(ID_CRM)
+);
+
+CREATE TABLE calendarizado(
+	ID_calendar int IDENTITY(1,1) Primary Key not null,
+	Evento varchar(20) not null,
+	Fecha date not null,
+	Estado varchar(15) not null,
+	ID_Evento int not null,
+	Foreign Key ID_Evento References Evento(ID_Evento)
+);
+
+CREATE TABLE Anuncio(
+	ID_Anuncio int IDENTITY(1,1) Primary Key not null,
+	nameAnunci varchar(20) not null,
+	Descripcion varchar(50) not null,
+	ID_blog int not null,
+	Foreign Key ID_blog References Blog(ID_blog)
+);
+
+Create Table gestionFlota(
+	ID_gestFlot int IDENTITY(1,1) Primary Key Not null,
+	Piloto varchar(20) not null,
+	carga varchar(15) not null,
+	ID_flota int not null,
+	Foreign Key ID_flota References Flota(ID_flota)
+);
+
+Create Table Acompañante(
+	ID_acompañante int IDENTITY(1,1) Primary Key Not Null,
+	Nombre Varchar(20) not null,
+	ID_gestFlot int not null,
+	Foreign Key ID_gestFlot References gestionFlota(ID_gestFlot)
+);
+
+Create Table Vehiculo(
+	ID_vehiculo int IDENTITY(1,1) Primary Key Not Null,
+	Marca varchar(10) not null,
+	modelo varchar(10) not null,
+	FechaSal date not null,
+	FechaEnt date not null,
+	ID_gestFlot int not null,
+	Foreign Key ID_gestFlot References gestionFlota(ID_gestFlot)
+);
+
+Create Table Entrevista(
+	ID_entrevista int IDENTITY(1,1) Primary Key Not Null,
+	Pasante varchar(20) not null,
+	PuestoSolicitado varchar(15) not null,
+	Fecha date not null,
+	ID_reclutamiento int not null,
+	Foreign Key ID_reclutamiento References Reclutamiento(ID_reclutamiento)
+);
+
+Create Table Proveedor(
+	ID_proveedor int IDENTITY(1,1) Primary Key Not Null,
+	NombProv varchar(15) not null,
+	FechaPedido date not null,
+	FechaEntrega date not null
+);
+
+Create Table Producto(
+	ID_producto int IDENTITY(1,1) Primary Key Not Null,
+	nombProd varchar(15) not null,
+	precio int not null
+);
+
+Create Table gestionCompra(
+	ID_gestComp int IDENTITY(1,1) Primary Key Not Null,
+	ID_proveedor int not null,
+	ID_produc int not null,
+	Total int not null,
+	ID_compras int not null,
+	Foreign Key ID_proveedor References Proveedor(ID_proveedor),
+	Foreign Key ID_produc References Producto(ID_producto),
+	Foreign Key ID_compras References Compras(ID_compras)
+);
+
+CREATE TABLE Mercaderia(
+	ID_mercaderia int IDENTITY(1,1) Primary Key Not null,
+	nombMerc varchar(20) not null,
+	Cantidad int not null,
+	Precio int not null
+);
+
+Create Table ProductosDispo(
+	ID_prodDisp int IDENTITY(1,1) Primary Key Not null,
+	ID_mercaderia int not null,
+	ID_inventario int not null,
+	Foreign Key ID_mercaderia References Mercaderia(ID_mercaderia),
+	Foreign Key ID_inventario References Inventario(ID_inventario) 
+);
+
+Create Table vendiendo(
+	ID_vendiendo int IDENTITY(1,1) Primary Key Not null,
+	ID_mercaderia int not null,
+	Foreign Key ID_mercaderia References Mercaderia(ID_mercaderia)
+);
+
+Create Table vendido(
+	ID_vendido  int IDENTITY(1,1) Primary Key Not null,
+	ID_vendiendo int not null,
+	Totalvendido int not null,
+	ID_ventas int not null,
+	Foreign Key ID_vendiendo References vendiendo(ID_vendiendo),
+	Foreign Key ID_ventas References ventas(ID_ventas)
+);
+
+Create Table Factura(
+	Cod_factura int IDENTITY(1,1) Primary Key Not null,
+	ID_vendido int not null,
+	Fecha date not null,
+	ID_factura int not null,
+	Foreign Key ID_vendido References vendido(ID_vendido),
+	Foreign Key ID_factura References Facturar(ID_factura)
+);
